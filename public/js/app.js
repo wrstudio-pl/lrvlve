@@ -105,17 +105,20 @@ module.exports = __webpack_require__(2);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_core_js_fn_object_assign__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_core_js_fn_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_core_js_fn_object_assign__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__data__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_core_js_fn_object_assign__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_core_js_fn_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_core_js_fn_object_assign__);
 
 
 
+
+var model = JSON.parse(window.vuebnb_listing_model);
+model = Object(__WEBPACK_IMPORTED_MODULE_1__helpers__["a" /* populateAmenitiesAndPrices */])(model);
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
   el: '#app',
-  data: Object.assign(__WEBPACK_IMPORTED_MODULE_2__data__["a" /* sample */], {
+  data: Object.assign(model, {
     headerImageStyle: {
-      'background-image': 'url(images/header.jpg)'
+      'background-image': 'url(' + model.images[0] + ')'
     },
     contracted: true,
     modalOpen: false
@@ -11562,51 +11565,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return sample; });
-var sample = {
-  title: 'Central Downtown Apartment with Amenities',
-  address: 'No. 11, Song-Sho Road, Taipei City, Taiwan 105',
-  about: 'Come and stay at this modern and comfortable apartment! My home is centrally located right in the middle' + ' of the downtown. Talk about convenience! Shops, stores, and other destination areas are nearby. \r\n\r\nFeel the ' + 'warmth of the sun as there is plenty of natural light showers. The living room features tv, sofa, table, radio, ' + 'and fan. There is free wi-fi with a fast internet speed. \r\n\r\nForgot shopping for breakfast staples? We provide ' + 'eggs, bread, cereals, coffee, milk, tea and cookies. Enjoy cooking as my kitchen boasts full size appliances. The ' + 'dining table is for four people. Need to wash your clothes? There is a washer and a dryer. We provide hampers, ' + 'detergents, and clothing conditioner. \r\n\r\nIf you need to hit the gym, there is located at the fourth floor of ' + 'the building. There is indoor spa and pool.',
-  amenities: [{
-    title: 'Wireless Internet',
-    icon: 'fa-wifi'
-  }, {
-    title: 'Pets Allowed',
-    icon: 'fa-paw'
-  }, {
-    title: 'TV',
-    icon: 'fa-television'
-  }, {
-    title: 'Kitchen',
-    icon: 'fa-cutlery'
-  }, {
-    title: 'Breakfast',
-    icon: 'fa-coffee'
-  }, {
-    title: 'Laptop friendly workspace',
-    icon: 'fa-laptop'
-  }],
-  prices: [{
-    title: 'Per night',
-    value: '$89'
-  }, {
-    title: 'Extra people',
-    value: 'No charge'
-  }, {
-    title: 'Weekly discount',
-    value: '18%'
-  }, {
-    title: 'Monthly discount',
-    value: '50%'
-  }]
-};
-
-
-/***/ }),
+/* 7 */,
 /* 8 */
 /***/ (function(module, exports) {
 
@@ -12165,6 +12124,81 @@ var defined = __webpack_require__(18);
 module.exports = function (it) {
   return Object(defined(it));
 };
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return populateAmenitiesAndPrices; });
+/* unused harmony export groupByCountry */
+var amenities = new Map();
+amenities.set('amenity_wifi', { title: 'Wireless Internet', icon: 'fa-wifi' });
+amenities.set('amenity_pets_allowed', { title: 'Pets Allowed', icon: 'fa-paw' });
+amenities.set('amenity_tv', { title: 'TV', icon: 'fa-television' });
+amenities.set('amenity_kitchen', { title: 'Kitchen', icon: 'fa-cutlery' });
+amenities.set('amenity_breakfast', { title: 'Breakfast', icon: 'fa-coffee' });
+amenities.set('amenity_laptop', { title: 'Laptop friendly workspace', icon: 'fa-laptop' });
+
+var prices = new Map();
+prices.set('price_per_night', 'Per night');
+prices.set('price_extra_people', 'Extra people');
+prices.set('price_weekly_discount', 'Weekly discount');
+prices.set('price_monthly_discount', 'Monthly discount');
+
+var populateAmenitiesAndPrices = function populateAmenitiesAndPrices(state) {
+  if (!state) return {};
+  var obj = {
+    id: state.id,
+    title: state.title,
+    address: state.address,
+    about: state.about,
+    amenities: [],
+    prices: [],
+    images: []
+  };
+  for (var key in state) {
+    var arr = key.split("_");
+    if (arr[0] === 'amenity') {
+      obj.amenities.push(key);
+    }
+    if (arr[0] === 'price') {
+      obj.prices.push({ title: key, value: state[key] });
+    }
+    if (arr[0] === 'image') {
+      obj.images.push(state[key]);
+    }
+  }
+
+  obj.amenities = obj.amenities.map(function (item) {
+    return amenities.get(item);
+  });
+
+  obj.prices = obj.prices.map(function (item) {
+    item.title = prices.get(item.title);
+    return item;
+  });
+
+  return obj;
+};
+
+
+
+var groupByCountry = function groupByCountry(listings) {
+  if (!listings) return {};
+  return listings.reduce(function (rv, x) {
+    var key = ['Taiwan', 'Poland', 'Cuba'].find(function (country) {
+      return x.address.indexOf(country) > -1;
+    });
+    if (!rv[key]) {
+      rv[key] = [];
+    }
+    rv[key].push(x);
+    return rv;
+  }, {});
+};
+
 
 
 /***/ })
