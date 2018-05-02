@@ -19,12 +19,15 @@ mix
     'node_modules/font-awesome/css/font-awesome.css',
     'resources/assets/css/style.css',
   ],
-  'public/css/style.css')
+    'public/css/style.css')
   .browserSync({
     // proxy: process.env.APP_URL,
     proxy: '127.0.0.1:8000',
-    open:false
+    open: false
   })
+  .options({
+    extractVueStyles: 'public/css/vue-style.css'
+    });
   // .copy('node_modules/open-sans-all/fonts', 'public/fonts')
   // .copy('node_modules/font-awesome/fonts', 'public/fonts')
   // .copy('resources/assets/images', 'public/images')
