@@ -2613,8 +2613,8 @@ button {
   position: relative;
 }
 
-.modal-content img {
-  max-width: 100%;
+.image-carousel img {
+  width: 100%;
 }
 
 body.modal-open {
@@ -2658,3 +2658,28 @@ body.modal-open {
     flex: 0 0 100%;
   }
 }
+
+.image-carousel {
+  height: 100%;
+  margin-top: -12vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  }
+  .image-carousel .controls {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  }
+  .carousel-control {
+    padding: 1rem;
+    color: #ffffff;
+    opacity: 0.85
+    }
+    @media (min-width: 744px) {
+    .carousel-control {
+    font-size: 3rem;
+    }
+    }
